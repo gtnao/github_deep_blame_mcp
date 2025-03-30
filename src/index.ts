@@ -78,18 +78,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         });
         const file = files.data.find((file) => file.filename === input.path);
         const commentsRes = await octokit.rest.issues.listComments({
-          owner: "primenumber-dev",
-          repo: "n-transfer-ui",
+          owner: input.owner,
+          repo: input.repo,
           issue_number: pullNumber,
         });
         const reviewCommentsRes = await octokit.rest.pulls.listReviewComments({
-          owner: "primenumber-dev",
-          repo: "n-transfer-ui",
+          owner: input.owner,
+          repo: input.repo,
           pull_number: pullNumber,
         });
         const reviewsRes = await octokit.rest.pulls.listReviews({
-          owner: "primenumber-dev",
-          repo: "n-transfer-ui",
+          owner: input.owner,
+          repo: input.repo,
           pull_number: pullNumber,
         });
         output.pullRequests.push({
