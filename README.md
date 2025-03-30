@@ -2,11 +2,12 @@
 
 A Model Context Protocol (MCP) server that provides a tool to deeply analyze the history of a file in a GitHub repository. This tool goes beyond standard git blame by retrieving comprehensive information about pull requests that modified a specific file, including:
 
-- Pull request details (title, body, state, etc.)
+- Pull request details
 - Comments
 - Review comments
 - Reviews
 - File changes
+- Issues
 
 ## Requirements
 
@@ -50,6 +51,7 @@ Replace `<your_path>` with the absolute path to the build/index.js file in your 
 ### GitHub Token
 
 You need to create a GitHub Personal Access Token with the following permissions:
+
 - `repo` (Full control of private repositories)
 
 You can create a token at: https://github.com/settings/tokens

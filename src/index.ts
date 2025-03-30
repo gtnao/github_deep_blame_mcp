@@ -92,6 +92,39 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           repo: input.repo,
           pull_number: pullNumber,
         });
+        const issueURLRegex =
+          /https:\/\/github.com\/([^\/]+)\/([^\/]+)\/issues\/(\d+)/g;
+        const issueMatches = [
+          ...(pull.data.body?.matchAll(issueURLRegex) || []),
+        ];
+        const issues = [];
+        const alreadyFetchedIssues = new Set<string>();
+        for (const issueMatch of issueMatches) {
+          const key = `${issueMatch[1]}/${issueMatch[2]}/${issueMatch[3]}`;
+          if (alreadyFetchedIssues.has(key)) {
+            continue;
+          }
+          alreadyFetchedIssues.add(key);
+          try {
+            const issuesRes = await octokit.rest.issues.get({
+              owner: issueMatch[1],
+              repo: issueMatch[2],
+              issue_number: parseInt(issueMatch[3]),
+            });
+            issues.push({
+              owner: issueMatch[1],
+              repo: issueMatch[2],
+              number: issuesRes.data.number,
+              title: issuesRes.data.title,
+              body: issuesRes.data.body,
+              user_login: issuesRes.data.user?.login,
+              html_url: issuesRes.data.html_url,
+              created_at: issuesRes.data.created_at,
+              updated_at: issuesRes.data.updated_at,
+              closed_at: issuesRes.data.closed_at,
+            });
+          } catch (error) {}
+        }
         output.pullRequests.push({
           number: pull.data.number,
           state: pull.data.state,
@@ -135,6 +168,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 },
               }
             : {}),
+          issues,
         });
       }
       return {
