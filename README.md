@@ -79,6 +79,7 @@ Once configured, you can use the `github_deep_blame` tool in your MCP-compatible
 - `owner`: The owner (user or organization) of the repository
 - `repo`: The name of the repository
 - `path`: The path to the file in the repository
+- `ignoreDependabot`: Whether to ignore PRs created by Dependabot (default: true)
 
 ## How It Works
 
