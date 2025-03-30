@@ -95,7 +95,8 @@ flowchart TD
     H --> J[Fetch PR review comments]
     H --> K[Fetch PR reviews]
     H --> L[Fetch file changes in PR]
-    I & J & K & L --> M[Compile comprehensive PR data]
+    H --> O[Extract and fetch related issues]
+    I & J & K & L & O --> M[Compile comprehensive PR data]
     M --> N[Return JSON response]
     N --> D
 ```

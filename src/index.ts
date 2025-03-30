@@ -21,9 +21,9 @@ const server = new Server(
 );
 
 const inputSchema = z.object({
-  owner: z.string().describe("The owner of the repository"),
-  repo: z.string().describe("The name of the repository"),
-  path: z.string().describe("The path to the file in the repository"),
+  owner: z.string().describe("The GitHub username or organization name that owns the repository"),
+  repo: z.string().describe("The name of the GitHub repository containing the target file"),
+  path: z.string().describe("The relative file path within the repository (e.g., 'src/index.js', 'README.md')"),
 });
 
 server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -31,7 +31,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: "github_deep_blame",
-        description: "Deeply blame a file in a GitHub repository",
+        description: "Performs a comprehensive analysis of a file's history in a GitHub repository, retrieving detailed information about all pull requests that modified the file, including PR details, comments, review comments, reviews, file changes, and related issues. This tool provides much richer context than standard git blame, helping to understand the complete evolution and decision history of a file.",
         inputSchema: zodToJsonSchema(inputSchema),
       },
     ],
