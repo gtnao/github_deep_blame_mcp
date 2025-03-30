@@ -24,6 +24,7 @@ const inputSchema = z.object({
   owner: z.string().describe("The GitHub username or organization name that owns the repository"),
   repo: z.string().describe("The name of the GitHub repository containing the target file"),
   path: z.string().describe("The relative file path within the repository (e.g., 'src/index.js', 'README.md')"),
+  ignoreDependabot: z.boolean().default(true).describe("Whether to ignore PRs created by Dependabot (default: true)"),
 });
 
 server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -62,6 +63,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           commit_sha: commit.sha,
         });
         for (const pull of pulls.data) {
+          if (input.ignoreDependabot && 
+              pull.user?.login === "dependabot[bot]") {
+            continue;
+          }
           pullNumbers.add(pull.number);
         }
       }
